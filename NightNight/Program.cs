@@ -42,20 +42,20 @@ namespace NightNight
                     switch (cl.ThemeMode)
                     {
                         case ThemeModes.Auto:
-                            themeChanger.SetAuto();
+                            themeChanger.ApplyBasedOnTimeOfDay();
                             break;
                         case ThemeModes.NightTime:
-                            themeChanger.SetDark();
+                            themeChanger.ApplyNight();
                             break;
                         case ThemeModes.DayTime:
-                            themeChanger.SetLight();
+                            themeChanger.ApplyDay();
                             break;
                     }
                     break;
             }
         }
 
-     
+
     }
 
     public class SettingsManager
@@ -65,7 +65,8 @@ namespace NightNight
 
         public static Settings LoadSettings()
         {
-            var settingsFilePath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "settings.json");
+
+            var settingsFilePath = SettingsFilePath();
             if (File.Exists(settingsFilePath))
             {
                 var json = File.ReadAllText(settingsFilePath);
@@ -80,11 +81,15 @@ namespace NightNight
             return new Settings();
         }
 
-        public void SaveSettings()
+        public virtual void SaveSettings() { }
+
+        protected static string SettingsFilePath()
         {
-            var settingsFilePath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "settings.json");
-            var json = JsonConvert.SerializeObject(this,Formatting.Indented);
-            File.WriteAllText(settingsFilePath,json);
+#if DEBUG
+            return Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "settings.json");
+#else
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "The Grinning Wizards\\NiteNite", "settings.json");
+#endif
         }
     }
 
@@ -93,12 +98,12 @@ namespace NightNight
     {
         public CommandLineOptions(string[] args)
         {
-            if (args.Length==0)
+            if (args.Length == 0)
             {
                 ApplicationMode = ApplicationModeSetting.GUI;
                 return;
             }
-            
+
             ApplicationMode = ApplicationModeSetting.CLI;
             e = args.GetEnumerator();
             string p;
@@ -131,7 +136,7 @@ namespace NightNight
             if (e == null) return null;
             if (e.MoveNext())
                 return e.Current as string;
-            return null;            
+            return null;
         }
     }
 
@@ -150,7 +155,7 @@ namespace NightNight
             DayTimeStart = new TimeSpan(7, 0, 0);
             NightTimeStart = new TimeSpan(20, 0, 0);
             SetApplicationMode = true;
-            Version = new Version(1,0,0,0);
+            Version = new Version(1, 0, 0, 0);
         }
     }
 
@@ -158,6 +163,16 @@ namespace NightNight
     {
         public Settings() : base() { }
 
+        public override void SaveSettings()
+        {
+            base.SaveSettings();
+            var settingsFilePath = SettingsFilePath();
+            Directory.CreateDirectory(Path.GetDirectoryName(settingsFilePath));
+            var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+            File.WriteAllText(settingsFilePath, json);
+            var t = new TaskSchedulerHelper();
+            t.ScheduleThemeChanges(this);
+        }
     }
 
 }

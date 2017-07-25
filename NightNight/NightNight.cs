@@ -25,21 +25,21 @@ namespace NightNight
 
         public ThemeChanger() { }
 
-        public void SetAuto()
+        public void ApplyBasedOnTimeOfDay()
         {
             var time = DateTime.Now.TimeOfDay;
             if (time >= Settings.DayTimeStart && time <= Settings.NightTimeStart)
-                SetLight();
+                ApplyDay();
             else
-                SetDark();
+                ApplyNight();
         }
 
-        public void SetLight()
+        public void ApplyDay()
         {
             SetTheme(Settings.DayThemeFile, ThemeModes.DayTime);
         }
 
-        public void SetDark()
+        public void ApplyNight()
         {
             SetTheme(Settings.NightThemeFile, ThemeModes.NightTime);
         }

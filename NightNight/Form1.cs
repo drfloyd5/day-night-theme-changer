@@ -48,12 +48,12 @@ namespace NightNight
 
         private void previewLight_Click(object sender, EventArgs e)
         {
-            _themeChanger.SetLight();
+            _themeChanger.ApplyDay();
         }
 
         private void previewDark_Click(object sender, EventArgs e)
         {
-            _themeChanger.SetDark();
+            _themeChanger.ApplyNight();
         }
 
         private void cancel_Click(object sender, EventArgs e)
@@ -110,13 +110,13 @@ namespace NightNight
         private void close_Click(object sender, EventArgs e)
         {
             Settings.SaveSettings();
-            _themeChanger.SetAuto();
+            _themeChanger.ApplyBasedOnTimeOfDay();
             Close();
         }
 
         private void apply_Click(object sender, EventArgs e)
         {
-            _themeChanger.SetAuto();
+            _themeChanger.ApplyBasedOnTimeOfDay();
         }
 
         private void lightTimePicker_ValueChanged(object sender, EventArgs e)
