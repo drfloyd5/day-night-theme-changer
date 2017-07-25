@@ -88,17 +88,19 @@ namespace NightNight
         }
     }
 
+
     public class CommandLineOptions
     {
         public CommandLineOptions(string[] args)
         {
-            e = args.GetEnumerator();
-            if (e == null)
+            if (args.Length==0)
             {
                 ApplicationMode = ApplicationModeSetting.GUI;
                 return;
             }
+            
             ApplicationMode = ApplicationModeSetting.CLI;
+            e = args.GetEnumerator();
             string p;
             while ((p = Next()) != null)
             {
