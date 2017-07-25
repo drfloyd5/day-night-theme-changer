@@ -44,10 +44,10 @@ namespace NightNight
                         case ThemeModes.Auto:
                             themeChanger.SetAuto();
                             break;
-                        case ThemeModes.Dark:
+                        case ThemeModes.NightTime:
                             themeChanger.SetDark();
                             break;
-                        case ThemeModes.Light:
+                        case ThemeModes.DayTime:
                             themeChanger.SetLight();
                             break;
                     }
@@ -107,11 +107,11 @@ namespace NightNight
                 switch (p.ToLower())
                 {
 
-                    case "-light":
-                        ThemeMode = ThemeModes.Light;
+                    case "-day":
+                        ThemeMode = ThemeModes.DayTime;
                         break;
-                    case "-dark":
-                        ThemeMode = ThemeModes.Dark;
+                    case "-night":
+                        ThemeMode = ThemeModes.NightTime;
                         break;
                     case "-auto":
                         ThemeMode = ThemeModes.Auto;

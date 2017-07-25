@@ -11,7 +11,7 @@ namespace NightNight
 
     public enum ThemeModes
     {
-        Auto, Light, Dark
+        Auto, DayTime, NightTime
     }
 
     public enum ApplicationModeSetting
@@ -36,18 +36,18 @@ namespace NightNight
 
         public void SetLight()
         {
-            SetTheme(Settings.DayThemeFile, ThemeModes.Light);
+            SetTheme(Settings.DayThemeFile, ThemeModes.DayTime);
         }
 
         public void SetDark()
         {
-            SetTheme(Settings.NightThemeFile, ThemeModes.Dark);
+            SetTheme(Settings.NightThemeFile, ThemeModes.NightTime);
         }
 
         public void SetTheme(string themeFile, ThemeModes lightMode)
         {
             if (Settings.SetApplicationMode)
-                Registry.SetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", lightMode == ThemeModes.Light ? 1 : 0, RegistryValueKind.DWord);
+                Registry.SetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", lightMode == ThemeModes.DayTime ? 1 : 0, RegistryValueKind.DWord);
             if (!string.IsNullOrEmpty(themeFile))
             {
                 var si = new ProcessStartInfo("ThemeSwitcher.exe", $"\"{themeFile}\"");
